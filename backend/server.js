@@ -1,5 +1,6 @@
 // ============================================================================
 // Servidor Express - Sistema Administrativo de Ventas e Inventario
+// Compatible con ejecución local y serverless (Vercel)
 // ============================================================================
 
 const express = require('express');
@@ -9,8 +10,7 @@ require('dotenv').config();
 
 const apiRouter = require('./routes');
 
-const app  = express();
-const PORT = process.env.PORT || 3000;
+const app = express();
 
 app.use(cors());
 app.use(express.json());
@@ -29,6 +29,11 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Error interno del servidor' });
 });
 
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+if (require.main === module) {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    });
+}
+
+module.exports = app;
