@@ -1,9 +1,10 @@
 // ============================================================================
-// inventario.js - Stock, alertas y kardex
+// inventario.js - Stock, alertas, kardex y registro de movimientos
 // ============================================================================
 
 document.addEventListener('DOMContentLoaded', async () => {
-    await Promise.all([cargarStock(), cargarAlertas(), cargarSelectProductos()]);
+    await Promise.all([cargarStock(), cargarAlertas(), cargarSelectProductos(), cargarSelectsMovimiento()]);
+    document.getElementById('form-movimiento').addEventListener('submit', registrarMovimiento);
 });
 
 async function cargarStock() {
@@ -97,6 +98,50 @@ async function cargarKardex() {
                 </tr>
             `;
         }).join('');
+    } catch (err) {
+        mostrarMensaje(err.message, 'danger');
+    }
+}
+
+async function cargarSelectsMovimiento() {
+    try {
+        const [productos, almacenes, usuarios] = await Promise.all([
+            api.get('/productos'),
+            api.get('/almacenes'),
+            api.get('/usuarios')
+        ]);
+
+        document.getElementById('mov-producto').innerHTML =
+            '<option value="">Seleccione...</option>' +
+            productos.map(p => `<option value="${p.id}">${p.codigo} - ${p.nombre}</option>`).join('');
+
+        document.getElementById('mov-almacen').innerHTML =
+            almacenes.map(a => `<option value="${a.id}">${a.nombre}</option>`).join('');
+
+        document.getElementById('mov-usuario').innerHTML =
+            usuarios.filter(u => u.estado).map(u => `<option value="${u.id}">${u.nombre_completo}</option>`).join('');
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+async function registrarMovimiento(e) {
+    e.preventDefault();
+    const body = {
+        tipo:        document.getElementById('mov-tipo').value,
+        id_producto: parseInt(document.getElementById('mov-producto').value),
+        id_almacen:  parseInt(document.getElementById('mov-almacen').value),
+        cantidad:    parseInt(document.getElementById('mov-cantidad').value),
+        id_usuario:  parseInt(document.getElementById('mov-usuario').value),
+        motivo:      document.getElementById('mov-motivo').value
+    };
+
+    try {
+        await api.post('/inventario/ajuste', body);
+        mostrarMensaje('Movimiento registrado correctamente');
+        bootstrap.Modal.getInstance(document.getElementById('modalMovimiento')).hide();
+        document.getElementById('form-movimiento').reset();
+        await Promise.all([cargarStock(), cargarAlertas()]);
     } catch (err) {
         mostrarMensaje(err.message, 'danger');
     }

@@ -78,19 +78,47 @@ exports.kardexProducto = async (req, res) => {
 
 exports.ajusteManual = async (req, res) => {
     const { id_producto, id_almacen, cantidad, tipo, id_usuario, motivo } = req.body;
+
+    if (!id_producto || !id_almacen || !cantidad || !tipo || !id_usuario) {
+        return res.status(400).json({ error: 'Faltan datos obligatorios' });
+    }
+    if (Number(cantidad) <= 0) {
+        return res.status(400).json({ error: 'La cantidad debe ser mayor a cero' });
+    }
+    if (!['entrada', 'salida', 'ajuste'].includes(tipo)) {
+        return res.status(400).json({ error: 'Tipo de movimiento inválido' });
+    }
+
     const client = await db.connect();
     try {
         await client.query('BEGIN');
 
+        const stockRes = await client.query(
+            'SELECT cantidad FROM inventario WHERE id_producto = $1 AND id_almacen = $2',
+            [id_producto, id_almacen]
+        );
+        const stockActual = stockRes.rows.length > 0 ? stockRes.rows[0].cantidad : 0;
+
+        if (tipo === 'salida' && stockActual < cantidad) {
+            await client.query('ROLLBACK');
+            return res.status(400).json({ error: `Stock insuficiente (disponible: ${stockActual})` });
+        }
+
         const delta = tipo === 'entrada' ? cantidad : -cantidad;
 
-        await client.query(`
-            INSERT INTO inventario (id_producto, id_almacen, cantidad)
-            VALUES ($1, $2, $3)
-            ON CONFLICT (id_producto, id_almacen)
-            DO UPDATE SET cantidad = inventario.cantidad + $3,
-                          fecha_actualizacion = CURRENT_TIMESTAMP
-        `, [id_producto, id_almacen, delta]);
+        if (stockRes.rows.length === 0) {
+            await client.query(
+                'INSERT INTO inventario (id_producto, id_almacen, cantidad) VALUES ($1, $2, $3)',
+                [id_producto, id_almacen, delta]
+            );
+        } else {
+            await client.query(
+                `UPDATE inventario
+                 SET cantidad = cantidad + $1, fecha_actualizacion = CURRENT_TIMESTAMP
+                 WHERE id_producto = $2 AND id_almacen = $3`,
+                [delta, id_producto, id_almacen]
+            );
+        }
 
         await client.query(`
             INSERT INTO movimiento_inventario
@@ -99,11 +127,11 @@ exports.ajusteManual = async (req, res) => {
         `, [id_producto, id_almacen, tipo, cantidad, motivo || 'Ajuste manual', id_usuario]);
 
         await client.query('COMMIT');
-        res.status(201).json({ mensaje: 'Ajuste registrado correctamente' });
+        res.status(201).json({ mensaje: 'Movimiento registrado correctamente' });
     } catch (err) {
         await client.query('ROLLBACK');
         console.error(err);
-        res.status(500).json({ error: 'Error al registrar ajuste' });
+        res.status(500).json({ error: err.message || 'Error al registrar movimiento' });
     } finally {
         client.release();
     }
