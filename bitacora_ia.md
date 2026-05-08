@@ -140,15 +140,97 @@ A continuación se documentan los prompts utilizados durante el desarrollo del p
 
 ---
 
+### Prompt 14
+**Propósito:** Verificar el entorno de desarrollo (Node.js, npm, PostgreSQL), instalar las dependencias del proyecto con `npm install` y arrancar el servidor en localhost para realizar pruebas funcionales antes del despliegue. Como PostgreSQL no estaba instalado localmente, se evaluaron dos opciones: instalación local vs uso de Supabase como base de datos PostgreSQL en la nube. Se decidió utilizar Supabase para evitar dependencia de software local y facilitar el posterior despliegue en Vercel.
+
+**Prompt:**
+> Ejecuta el localhost para hacer pruebas al yo darte el visto bueno, lo subimos a Git y después a Vercel.
+
+---
+
+### Prompt 15
+**Propósito:** Configurar el servidor MCP (Model Context Protocol) de Supabase en el alcance del proyecto, generando el archivo `.mcp.json` que permite la integración entre Claude Code y la base de datos remota de Supabase para automatizar operaciones de administración (consulta de tablas, aplicación de migraciones, etc.).
+
+**Prompt:**
+> claude mcp add --scope project --transport http supabase "https://mcp.supabase.com/mcp?project_ref=dsvbogtygnivdcscppcg&read_only=true"
+
+---
+
+### Prompt 16
+**Propósito:** Aplicar de forma automatizada el script `schema.sql` (creación de las 12 tablas) y el script `seed.sql` (datos de prueba) sobre la base de datos PostgreSQL alojada en Supabase, utilizando un Personal Access Token (PAT) y la API de gestión de Supabase (`api.supabase.com`). Verificar que las 12 tablas se crearon correctamente y que los datos de prueba se cargaron (3 usuarios, 5 categorías, 10 productos, 5 clientes, 3 ventas con sus 12 detalles, 17 movimientos de inventario). Obtener el connection string del pooler de Supabase para configurar el backend.
+
+**Prompt:**
+> Aplica el schema y seed directamente en Supabase usando el Personal Access Token (PAT redactado por seguridad).
+
+---
+
+### Prompt 17
+**Propósito:** Adaptar el backend Node.js para conectarse a la base de datos remota de Supabase. Modificaciones realizadas: (1) `backend/config/database.js` actualizado para soportar `DATABASE_URL` con SSL, manteniendo compatibilidad con variables individuales para entornos locales; (2) `backend/server.js` separado en `app` y `listen` para que funcione tanto en localhost (desarrollo) como en serverless (Vercel); (3) creación de `vercel.json` con configuración de builds y rutas; (4) creación de `database/setup-db.js` como script auxiliar para aplicar schema y seed desde el connection string. Verificación de la conexión Node.js → Supabase pooler y arranque exitoso del servidor en `http://localhost:3000` con todos los endpoints respondiendo correctamente.
+
+**Prompt:**
+> Configura el backend para conectarse al pooler de Supabase y prepáralo para Vercel.
+
+---
+
+### Prompt 18
+**Propósito:** Inicializar el repositorio Git en el directorio del proyecto, crear el commit inicial con los 47 archivos del sistema (excluyendo `node_modules` y `.env` mediante `.gitignore`), crear el repositorio público en GitHub mediante el CLI `gh` y realizar el push del código fuente. URL pública: https://github.com/DanielDiaz8344/proyecto-bd-ventas
+
+**Prompt:**
+> Súbelo a Git para yo subirlo a Vercel.
+
+---
+
+### Prompt 19
+**Propósito:** Guiar el proceso de despliegue en Vercel y la configuración de la variable de entorno `DATABASE_URL` en el panel de control de Vercel para que el backend desplegado pueda conectarse a la base de datos de Supabase. Forzar un nuevo despliegue (redeploy) para que la variable de entorno tomase efecto y verificar que la URL pública del proyecto carga correctamente con datos reales en el dashboard.
+
+**Prompt:**
+> Ya subí el proyecto a Vercel. Ayúdame a configurar la variable de entorno DATABASE_URL para que el backend conecte a Supabase.
+
+---
+
+### Prompt 20
+**Propósito:** Rediseñar completamente la interfaz de usuario para lograr un look profesional tipo dashboard ERP moderno (referencia visual: Vercel Dashboard, Linear). Cambios implementados: (1) sidebar lateral oscuro de 260px con organización por secciones (General, Operaciones, Catálogo, Contactos) y logo con gradiente; (2) tipografía Inter para texto y JetBrains Mono para códigos vía Google Fonts; (3) sistema de design tokens con variables CSS para paleta refinada (slate, azul, verde, naranja, morado); (4) stat cards con iconos coloreados y micro-interacciones (hover lift); (5) cards de acción rápida con borde resaltado al hover; (6) tablas con headers en mayúscula y filas con hover sutil; (7) dashboard rediseñado con sección de últimas ventas y panel de productos con stock bajo; (8) responsive con sidebar colapsable en mobile (<992px).
+
+**Prompt:**
+> Look más profesional.
+
+---
+
+### Prompt 21
+**Propósito:** Implementar la funcionalidad de registro manual de movimientos de inventario (entradas, salidas y ajustes) que faltaba en la interfaz. (1) Backend: mejora del endpoint `POST /api/inventario/ajuste` con validación de campos obligatorios, validación de tipo permitido (entrada/salida/ajuste), verificación de stock disponible antes de salidas (con mensaje claro de stock disponible), creación automática del registro de inventario si no existe, y mantenimiento de la transacción atómica BEGIN/COMMIT/ROLLBACK. (2) Frontend: botón "Nuevo movimiento" en el page-header de la página de inventario, modal con formulario completo (tipo, producto, almacén, cantidad, usuario, motivo), carga dinámica de selects (productos, almacenes, usuarios), refresco automático de tablas tras registrar el movimiento, y manejo de errores con mensajes flotantes.
+
+**Prompt:**
+> ¿Y cómo agrego cosas al inventario?
+
+---
+
+### Prompt 22
+**Propósito:** Actualizar la bitácora de uso de IA con los prompts faltantes desde el desarrollo del frontend (Prompt 13) hasta el momento actual, registrando todas las decisiones tomadas con asistencia de la IA durante las fases de despliegue, configuración de Supabase, mejora del diseño y adición de funcionalidades.
+
+**Prompt:**
+> Actualiza la bitácora.
+
+---
+
 ## Stack Tecnológico Definido
 
 | Capa | Tecnología | Justificación |
 |---|---|---|
-| Frontend | HTML, CSS, Bootstrap | Indicado por el docente |
+| Frontend | HTML5, CSS3, Bootstrap 5, Inter (Google Fonts), Bootstrap Icons | Indicado por el docente; Inter y BS Icons añadidos para look profesional |
 | Backend | Node.js + Express | Decisión del equipo (no fue restringido por el docente) |
-| Base de datos | PostgreSQL | Permitido por el docente |
-| Conector BD | librería `pg` (node-postgres) | Estándar para Node.js + PostgreSQL |
-| Hosting | Render.com / Railway | Planes gratuitos, despliegue rápido |
+| Base de datos | PostgreSQL 17 (Supabase) | Permitido por el docente; Supabase ofrece hosting gratuito y mismo PostgreSQL real |
+| Conector BD | `pg` (node-postgres) con SSL | Estándar para Node.js + PostgreSQL; SSL requerido por Supabase |
+| Hosting frontend + backend | Vercel (plan free) | Deploy automático desde GitHub, soporta Node.js serverless |
+| Hosting BD | Supabase (plan free) | PostgreSQL gestionado, dashboard SQL Editor, Connection Pooler |
+| Repositorio | GitHub público | Versionado y enlace al deploy |
+
+---
+
+## URLs del Proyecto
+
+- **Repositorio GitHub:** https://github.com/DanielDiaz8344/proyecto-bd-ventas
+- **Aplicación desplegada:** (Vercel) — el enlace público se incluirá en el documento final de entrega
+- **Base de datos:** Supabase project `dsvbogtygnivdcscppcg` (región us-west-2)
 
 ---
 
@@ -157,3 +239,4 @@ A continuación se documentan los prompts utilizados durante el desarrollo del p
 - Todos los prompts utilizados durante el desarrollo del proyecto deben quedar registrados en este documento.
 - La bitácora se actualizará de forma incremental conforme avance el proyecto.
 - Este archivo se incluirá como anexo del entregable final.
+- El uso de IA se limitó a tareas de redacción, generación de código siguiendo decisiones tomadas por el estudiante, búsqueda de información y aplicación de configuraciones. Las decisiones de arquitectura (uso de Node.js, elección de Supabase, estructura de tablas, alcance de la entrega) fueron tomadas por el estudiante.
