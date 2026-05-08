@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Sistema de Ventas e Inventario</title>
+    <title>Dashboard · BD Ventas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/styles.css">
@@ -12,98 +15,130 @@
 
     <div id="navbar-slot"></div>
 
-    <main class="container py-4">
+    <main>
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="page-header">
             <div>
-                <h1 class="h3 mb-1">Dashboard</h1>
-                <p class="text-muted mb-0">Resumen general del sistema</p>
+                <h1>Dashboard</h1>
+                <p class="subtitle">Resumen general del sistema administrativo</p>
             </div>
+            <a href="pages/nueva-venta.html" class="btn btn-primary">
+                <i class="bi bi-plus-lg me-1"></i> Nueva venta
+            </a>
         </div>
 
         <div class="row g-3 mb-4">
-            <div class="col-md-3">
-                <div class="card dashboard-card text-bg-primary">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <div class="text-uppercase small">Productos</div>
-                                <div class="numero-grande" id="num-productos">--</div>
-                            </div>
-                            <i class="bi bi-box-seam icono"></i>
-                        </div>
+            <div class="col-sm-6 col-xl-3">
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class="bi bi-box-seam"></i></div>
+                    <div class="stat-content">
+                        <p class="stat-label">Productos</p>
+                        <div class="stat-value" id="num-productos">--</div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <div class="card dashboard-card text-bg-success">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <div class="text-uppercase small">Clientes</div>
-                                <div class="numero-grande" id="num-clientes">--</div>
-                            </div>
-                            <i class="bi bi-people icono"></i>
-                        </div>
+            <div class="col-sm-6 col-xl-3">
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="bi bi-people"></i></div>
+                    <div class="stat-content">
+                        <p class="stat-label">Clientes</p>
+                        <div class="stat-value" id="num-clientes">--</div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <div class="card dashboard-card text-bg-info">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <div class="text-uppercase small">Ventas registradas</div>
-                                <div class="numero-grande" id="num-ventas">--</div>
-                            </div>
-                            <i class="bi bi-cart-check icono"></i>
-                        </div>
+            <div class="col-sm-6 col-xl-3">
+                <div class="stat-card">
+                    <div class="stat-icon purple"><i class="bi bi-receipt"></i></div>
+                    <div class="stat-content">
+                        <p class="stat-label">Ventas registradas</p>
+                        <div class="stat-value" id="num-ventas">--</div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <div class="card dashboard-card text-bg-warning">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <div class="text-uppercase small">Alertas de stock</div>
-                                <div class="numero-grande" id="num-alertas">--</div>
-                            </div>
-                            <i class="bi bi-exclamation-triangle icono"></i>
-                        </div>
+            <div class="col-sm-6 col-xl-3">
+                <div class="stat-card">
+                    <div class="stat-icon orange"><i class="bi bi-exclamation-triangle"></i></div>
+                    <div class="stat-content">
+                        <p class="stat-label">Alertas de stock</p>
+                        <div class="stat-value" id="num-alertas">--</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <h2 class="h5 mb-3">Acceso rápido</h2>
+        <h2 style="font-size:1rem; font-weight:600; margin: 28px 0 14px;">Acceso rápido</h2>
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <a href="pages/nueva-venta.html" class="action-card">
+                    <div class="action-icon"><i class="bi bi-cart-plus"></i></div>
+                    <div>
+                        <h5>Registrar venta</h5>
+                        <p>Crear factura y descontar stock</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="pages/productos.html" class="action-card">
+                    <div class="action-icon"><i class="bi bi-tags"></i></div>
+                    <div>
+                        <h5>Gestionar productos</h5>
+                        <p>Catálogo, precios y categorías</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="pages/inventario.html" class="action-card">
+                    <div class="action-icon"><i class="bi bi-clipboard-data"></i></div>
+                    <div>
+                        <h5>Ver inventario</h5>
+                        <p>Stock por almacén y kardex</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
         <div class="row g-3">
-            <div class="col-md-4">
-                <a href="pages/ventas.html" class="card dashboard-card h-100 text-decoration-none">
-                    <div class="card-body">
-                        <h5><i class="bi bi-cart-plus"></i> Registrar venta</h5>
-                        <p class="text-muted small mb-0">Crear una nueva factura y descontar inventario</p>
+            <div class="col-lg-7">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>Últimas ventas</span>
+                        <a href="pages/ventas.html" class="text-decoration-none" style="font-size:0.8rem;">Ver todas →</a>
                     </div>
-                </a>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Factura</th>
+                                    <th>Cliente</th>
+                                    <th class="text-end">Total</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla-ultimas-ventas"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4">
-                <a href="pages/productos.html" class="card dashboard-card h-100 text-decoration-none">
-                    <div class="card-body">
-                        <h5><i class="bi bi-box-seam"></i> Gestionar productos</h5>
-                        <p class="text-muted small mb-0">Catálogo, precios y categorías</p>
+
+            <div class="col-lg-5">
+                <div class="card h-100">
+                    <div class="card-header">Productos con stock bajo</div>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th class="text-end">Stock</th>
+                                    <th class="text-end">Mín.</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla-alertas-dashboard"></tbody>
+                        </table>
                     </div>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="pages/inventario.html" class="card dashboard-card h-100 text-decoration-none">
-                    <div class="card-body">
-                        <h5><i class="bi bi-clipboard-data"></i> Ver inventario</h5>
-                        <p class="text-muted small mb-0">Stock por almacén y kardex</p>
-                    </div>
-                </a>
+                </div>
             </div>
         </div>
 
@@ -123,10 +158,36 @@
                     api.get('/ventas'),
                     api.get('/inventario/alertas')
                 ]);
+
                 document.getElementById('num-productos').textContent = productos.length;
                 document.getElementById('num-clientes').textContent  = clientes.length;
                 document.getElementById('num-ventas').textContent    = ventas.length;
                 document.getElementById('num-alertas').textContent   = alertas.length;
+
+                const tbodyVentas = document.getElementById('tabla-ultimas-ventas');
+                const ultimas = ventas.slice(0, 5);
+                tbodyVentas.innerHTML = ultimas.length === 0
+                    ? '<tr><td colspan="4" class="text-center text-muted py-4">Sin ventas</td></tr>'
+                    : ultimas.map(v => {
+                        const badge = v.estado === 'pagada' ? 'success' : v.estado === 'anulada' ? 'danger' : 'warning';
+                        return `<tr>
+                            <td><code>${v.numero_factura}</code></td>
+                            <td>${v.cliente_nombre}</td>
+                            <td class="text-end fw-semibold">${formatoMoneda(v.total)}</td>
+                            <td><span class="badge bg-${badge}">${v.estado}</span></td>
+                        </tr>`;
+                    }).join('');
+
+                const tbodyAlertas = document.getElementById('tabla-alertas-dashboard');
+                tbodyAlertas.innerHTML = alertas.length === 0
+                    ? '<tr><td colspan="3" class="text-center text-success py-4"><i class="bi bi-check-circle"></i> Stock OK</td></tr>'
+                    : alertas.slice(0, 6).map(a => `
+                        <tr class="stock-bajo">
+                            <td><small><code>${a.codigo}</code> ${a.producto}</small></td>
+                            <td class="text-end fw-bold text-danger">${a.stock_actual}</td>
+                            <td class="text-end text-muted">${a.stock_minimo}</td>
+                        </tr>
+                    `).join('');
             } catch (err) {
                 console.error('Error cargando dashboard:', err);
             }
