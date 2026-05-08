@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div id="navbar-slot"></div>
+
+    <main class="container py-4">
+        <h1 class="h3 mb-3">Inventario</h1>
+
+        <ul class="nav nav-tabs mb-3" role="tablist">
+            <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-stock">Stock actual</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-alertas">Alertas <span class="badge bg-warning text-dark ms-1" id="badge-alertas">0</span></button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-kardex">Kardex</button></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="tab-stock">
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Producto</th>
+                                    <th>Almacén</th>
+                                    <th>Ubicación</th>
+                                    <th class="text-end">Stock</th>
+                                    <th class="text-end">Mín.</th>
+                                    <th class="text-end">Máx.</th>
+                                    <th>Actualizado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla-stock"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="tab-alertas">
+                <div class="alert alert-warning"><i class="bi bi-exclamation-triangle"></i> Productos por debajo del stock mínimo</div>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Producto</th>
+                                    <th>Almacén</th>
+                                    <th class="text-end">Stock actual</th>
+                                    <th class="text-end">Stock mínimo</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla-alertas"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="tab-kardex">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <label class="form-label">Producto</label>
+                        <select class="form-select" id="select-producto-kardex" onchange="cargarKardex()">
+                            <option value="">Seleccione un producto...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Tipo</th>
+                                    <th>Almacén</th>
+                                    <th class="text-end">Cantidad</th>
+                                    <th class="text-end">Costo unit.</th>
+                                    <th>Referencia</th>
+                                    <th>Usuario</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla-kardex"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-slot"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/inventario.js"></script>
+</body>
+</html>

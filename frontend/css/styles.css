@@ -1,0 +1,61 @@
+/* ============================================================
+   Estilos personalizados - Sistema de Ventas e Inventario
+   ============================================================ */
+
+body {
+    background-color: #f4f6f9;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.navbar-brand {
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+main {
+    min-height: calc(100vh - 56px);
+}
+
+.dashboard-card {
+    border: none;
+    border-radius: 12px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.dashboard-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+}
+
+.dashboard-card .icono {
+    font-size: 2.5rem;
+    opacity: 0.85;
+}
+
+.tabla-acciones {
+    white-space: nowrap;
+}
+.tabla-acciones .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.85rem;
+}
+
+.stock-bajo {
+    background-color: #fff3cd !important;
+}
+.stock-critico {
+    background-color: #f8d7da !important;
+}
+
+.numero-grande {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+footer {
+    background: #212529;
+    color: #adb5bd;
+    padding: 1rem 0;
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.85rem;
+}
